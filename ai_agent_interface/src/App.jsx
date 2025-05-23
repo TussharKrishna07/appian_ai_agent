@@ -16,6 +16,45 @@ function App() {
     }
   }, [chatHistory]);
 
+  // Add new useEffect to restore chat history on component mount
+  useEffect(() => {
+    const restoreChatHistory = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/chat?thread_id=1', {
+          method: 'GET',
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.messages && data.messages.length > 0) {
+            // Convert base64 images back to object URLs for display
+            const restoredMessages = data.messages.map(msg => {
+              if (msg.image && msg.image.startsWith('data:image')) {
+                // Convert base64 to blob URL for consistent display
+                const byteCharacters = atob(msg.image.split(',')[1]);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                const imageUrl = URL.createObjectURL(blob);
+                
+                return { ...msg, image: imageUrl };
+              }
+              return msg;
+            });
+            setChatHistory(restoredMessages);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to restore chat history:', error);
+      }
+    };
+
+    restoreChatHistory();
+  }, []); // Empty dependency array means this runs once on mount
+
   const sendMessage = async () => {
     const trimmed = message.trim();
     if (!trimmed && !image || isLoading) return;

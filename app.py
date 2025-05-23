@@ -68,5 +68,55 @@ def chat():
         # if image_path and os.path.exists(image_path):
         #     os.remove(image_path)
 
+
+@app.route('/chat', methods=['GET'])
+def get_chat_state():
+    # Get the current state of the model
+    thread_id = request.args.get('thread_id', '1')  # Default to thread_id "1"
+    
+    try:
+        from ai_agent import get_state
+        state = get_state(thread_id)
+        
+        # Extract messages and format them for frontend
+        messages = []
+        if state.values.get("messages"): # type: ignore
+            for msg in state.values["messages"]: # type: ignore
+                # Skip system messages
+                if hasattr(msg, 'type') and msg.type == 'system':
+                    continue
+                    
+                # Format message for frontend
+                role = 'user' if msg.type == 'human' else 'assistant'
+                content = msg.content
+                
+                # Handle different content types (text vs multimodal)
+                if isinstance(content, list):
+                    # Extract text and image data from multimodal content
+                    text_content = ""
+                    image_data = None
+                    
+                    for item in content:
+                        if item.get("type") == "text":
+                            text_content = item.get("text", "")
+                        elif item.get("type") == "image":
+                            image_data = item.get("data")
+                    
+                    messages.append({
+                        "role": role,
+                        "content": text_content,
+                        "image": f"data:image/jpeg;base64,{image_data}" if image_data else None
+                    })
+                else:
+                    messages.append({
+                        "role": role,
+                        "content": content,
+                        "image": None
+                    })
+        
+        return jsonify({"messages": messages})
+    except Exception as e:
+        return jsonify({"error": str(e), "messages": []}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)

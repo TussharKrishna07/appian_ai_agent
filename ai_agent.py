@@ -8,11 +8,9 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
 from tools import search_tool
 from dotenv import load_dotenv
-import os
 
+# Load environment variables from .env file
 load_dotenv()
-# Set up environment variables
-
 # Initialize LLM
 llm = init_chat_model("gemini-2.0-flash", model_provider="google_genai")
 llm_with_tools = llm.bind_tools([search_tool])
@@ -96,5 +94,14 @@ def run_agent(user_input, thread_id: str = "1") -> str:
                     {"role": "user", "content": user_input}
         ]
     result = graph.invoke({"messages": messages}, config=config) # type: ignore
-    print("Result:", result)
+    for i in range(len(result["messages"])):
+        result["messages"][i].pretty_print()
     return result["messages"][-1].content
+
+import json
+
+def get_state(thread_id: str = "1") -> dict:
+    config = {"configurable": {"thread_id": thread_id}}
+    current_state_snapshot = graph.get_state(config=config) # type: ignore
+    return (current_state_snapshot) # type: ignore
+  
