@@ -96,6 +96,7 @@ def run_agent(user_input, thread_id: str = "1") -> str:
     result = graph.invoke({"messages": messages}, config=config) # type: ignore
     for i in range(len(result["messages"])):
         result["messages"][i].pretty_print()
+        print("thread_id :",thread_id)
     return result["messages"][-1].content
 
 import json

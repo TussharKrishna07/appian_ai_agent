@@ -9,6 +9,10 @@ function App() {
   const chatHistoryRef = useRef(null);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [currentThreadId, setCurrentThreadId] = useState('1');
+  const [chatThreads, setChatThreads] = useState([
+    { id: '1', name: 'Chat 1', createdAt: new Date().toISOString() }
+  ]);
 
   useEffect(() => {
     if (chatHistoryRef.current) {
@@ -16,11 +20,11 @@ function App() {
     }
   }, [chatHistory]);
 
-  // Add new useEffect to restore chat history on component mount
+  // Load chat history when thread changes
   useEffect(() => {
     const restoreChatHistory = async () => {
       try {
-        const res = await fetch('http://localhost:5000/chat?thread_id=1', {
+        const res = await fetch(`http://localhost:5000/chat?thread_id=${currentThreadId}`, {
           method: 'GET',
         });
 
@@ -45,15 +49,18 @@ function App() {
               return msg;
             });
             setChatHistory(restoredMessages);
+          } else {
+            setChatHistory([]);
           }
         }
       } catch (error) {
         console.error('Failed to restore chat history:', error);
+        setChatHistory([]);
       }
     };
 
     restoreChatHistory();
-  }, []); // Empty dependency array means this runs once on mount
+  }, [currentThreadId]);
 
   const sendMessage = async () => {
     const trimmed = message.trim();
@@ -74,6 +81,8 @@ function App() {
       if (image) {
         formData.append('image', image);
       }
+      // Add thread_id to form data
+      formData.append('thread_id', currentThreadId);
 
       const res = await fetch('http://localhost:5000/chat', {
         method: 'POST',
@@ -125,6 +134,38 @@ function App() {
     setImagePreview(null);
   };
 
+  const createNewChat = () => {
+    // Generate new thread ID by incrementing the highest existing ID
+    const existingIds = chatThreads.map(thread => parseInt(thread.id));
+    const newThreadId = (Math.max(...existingIds) + 1).toString();
+    
+    // Create new chat thread
+    const newThread = {
+      id: newThreadId,
+      name: `Chat ${newThreadId}`,
+      createdAt: new Date().toISOString()
+    };
+    
+    // Add to threads list
+    setChatThreads(prev => [...prev, newThread]);
+    
+    // Switch to new thread
+    setCurrentThreadId(newThreadId);
+    
+    // Clear current chat history (will be loaded from backend in useEffect)
+    setChatHistory([]);
+  };
+
+  const switchToThread = (threadId) => {
+    setCurrentThreadId(threadId);
+    // Chat history will be loaded automatically by useEffect
+  };
+
+  const formatThreadName = (thread) => {
+    const date = new Date(thread.createdAt);
+    return `${thread.name} - ${date.toLocaleDateString()}`;
+  };
+
   return (
     <div className="app-container">
       <aside className="sidebar">
@@ -132,15 +173,26 @@ function App() {
           <h2>Chat History</h2>
         </div>
         <div className="new-chat">
-          <button onClick={() => setChatHistory([])}>
+          <button onClick={createNewChat}>
             <span>+</span> New Chat
           </button>
+        </div>
+        <div className="chat-threads">
+          {chatThreads.map((thread) => (
+            <button
+              key={thread.id}
+              className={`thread-button ${currentThreadId === thread.id ? 'active' : ''}`}
+              onClick={() => switchToThread(thread.id)}
+            >
+              {formatThreadName(thread)}
+            </button>
+          ))}
         </div>
       </aside>
 
       <main className="main-content">
         <header className="app-header">
-          <h1>AI Assistant</h1>
+          <h1>AI Assistant - {chatThreads.find(t => t.id === currentThreadId)?.name || 'Chat'}</h1>
         </header>
 
         <div className="chat-window" ref={chatHistoryRef}>

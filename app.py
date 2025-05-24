@@ -6,6 +6,7 @@ from io import BytesIO
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from ai_agent import run_agent
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
@@ -15,9 +16,11 @@ def chat():
     
     user_message = request.form.get("message", "")
     image_file = request.files.get("image",None)
+    thread_id = request.form.get("thread_id", "1")  # Default to thread_id "1"
 
     print("User message:", user_message)
     print("Image file:", image_file)
+    print("Thread ID:", thread_id)
 
     print(image_file)
 
@@ -59,7 +62,7 @@ def chat():
                 ]   
     try:
         # Pass both the message and the image path to the agent
-        reply = run_agent(user_request)
+        reply = run_agent(user_request,thread_id)  # type: ignore
         return jsonify({"reply": reply})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
