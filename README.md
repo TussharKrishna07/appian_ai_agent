@@ -168,13 +168,6 @@ def get_state(thread_id: str = "1") -> dict:
 - **Context Continuity**: Remembers previous product discussions
 - **Cross-Session Persistence**: Resumes conversations seamlessly
 
-### 🔗 **8. Direct Purchase Integration**
-Automated shopping workflow with Amazon integration:
-
-```python
-# Dynamic Amazon link generation
-link_format = "https://www.amazon.in/s?k=search+query+based+on+itemname+and+traits"
-```
 
 **Features:**
 - **Smart URL Generation**: Creates optimized Amazon search links
