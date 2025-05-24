@@ -1,1 +1,4 @@
 .env
+ai_agent_interface/package-lock.json
+__pycache__/
+ai_agent_interface/node_modules/
