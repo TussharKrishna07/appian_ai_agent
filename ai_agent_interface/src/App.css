@@ -585,13 +585,13 @@ code {
 
 @keyframes typing {
     0%,
-    80%,
+    60%,
     100% {
-        transform: scale(0.8);
-        opacity: 0.5;
+        transform: translateY(0);
+        opacity: 0.4;
     }
-    40% {
-        transform: scale(1);
+    30% {
+        transform: translateY(-10px);
         opacity: 1;
     }
 }
@@ -671,9 +671,8 @@ code {
 }
 
 .message-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #4285f4 !important;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1) !important;
 }
 
 .message-input::placeholder {
@@ -703,6 +702,7 @@ code {
 }
 
 .file-input-btn:hover {
+    transform: translateY(-1px);
     background: var(--hover-bg);
     border-color: var(--accent-color);
 }
@@ -736,9 +736,9 @@ code {
 }
 
 .send-button:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
+    transform: none !important;
 }
 
 
@@ -893,4 +893,20 @@ code {
 .message-text em {
     font-style: italic;
     color: var(--text-primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

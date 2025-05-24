@@ -376,46 +376,145 @@ function App() {
           style={{ 
             flexShrink: 0, 
             minHeight: '80px',
-            maxHeight: '200px',
+            maxHeight: imagePreview ? '350px' : '120px',
             padding: '1rem',
             borderTop: '1px solid var(--border-color, #e0e0e0)',
-            backgroundColor: 'var(--input-bg, #fff)'
+            backgroundColor: 'var(--input-bg, #fff)',
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'max-height 0.3s ease-in-out'
           }}
         >
           {imagePreview && (
-            <div className="image-preview" style={{ marginBottom: '10px' }}>
-              <div className="preview-header">
-                <span className="preview-label">📸 Image attached</span>
-                <button onClick={handleRemoveImage} className="remove-image">
+            <div className="image-preview" style={{ 
+              marginBottom: '12px',
+              flexShrink: 0,
+              maxHeight: '220px',
+              overflow: 'hidden',
+              animation: 'fadeIn 0.3s ease-in-out'
+            }}>
+              <div className="preview-header" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '8px',
+                fontSize: '12px',
+                color: 'var(--text-secondary, #666)',
+                fontWeight: '500'
+              }}>
+                <span className="preview-label">📸 Image ready to send</span>
+                <button 
+                  onClick={handleRemoveImage} 
+                  className="remove-image" 
+                  style={{
+                    background: 'rgba(244, 67, 54, 0.1)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    padding: '4px 8px',
+                    borderRadius: '6px',
+                    color: '#f44336',
+                    transition: 'all 0.2s ease',
+                    fontWeight: '600',
+                    minWidth: '24px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = 'rgba(244, 67, 54, 0.2)'}
+                  onMouseLeave={(e) => e.target.style.background = 'rgba(244, 67, 54, 0.1)'}
+                >
                   ✕
                 </button>
               </div>
-              <img src={imagePreview} alt="Preview" style={{ maxHeight: '100px' }} />
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '8px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '12px',
+                border: '1px solid #e9ecef'
+              }}>
+                <img 
+                  src={imagePreview} 
+                  alt="Preview" 
+                  style={{ 
+                    maxHeight: '180px',
+                    maxWidth: '100%',
+                    width: 'auto',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                    transition: 'transform 0.2s ease'
+                  }} 
+                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                />
+              </div>
             </div>
           )}
-          <div className="input-row" style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Describe what you're looking for or upload an image..."
-              disabled={isLoading}
-              rows="1"
-              style={{
-                flex: 1,
-                minHeight: '40px',
-                maxHeight: '100px',
-                resize: 'none',
-                border: '1px solid var(--border-color, #ddd)',
-                borderRadius: '8px',
-                padding: '10px',
-                fontFamily: 'inherit',
-                fontSize: '14px',
-                lineHeight: '1.4'
-              }}
-              className="message-input"
-            />
-            <div className="input-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div className="input-row" style={{ 
+            display: 'flex', 
+            gap: '12px', 
+            alignItems: 'flex-end',
+            flexShrink: 0
+          }}>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <textarea
+                value={message}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                  // Auto-resize textarea
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
+                }}
+                onKeyPress={handleKeyPress}
+                placeholder="Describe what you're looking for or upload an image..."
+                disabled={isLoading}
+                rows="1"
+                style={{
+                  width: '100%',
+                  minHeight: '44px',
+                  maxHeight: '80px',
+                  resize: 'none',
+                  border: '2px solid var(--border-color, #e0e0e0)',
+                  borderRadius: '12px',
+                  padding: '12px 16px',
+                  fontFamily: 'inherit',
+                  fontSize: '14px',
+                  lineHeight: '1.5',
+                  outline: 'none',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: isLoading ? '#f5f5f5' : '#fff',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}
+                className="message-input"
+                onFocus={(e) => e.target.style.borderColor = '#4285f4'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-color, #e0e0e0)'}
+              />
+              {isLoading && (
+                <div style={{
+                  position: 'absolute',
+                  right: '16px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: '12px',
+                  color: '#666',
+                  fontWeight: '500'
+                }}>
+                  Processing...
+                </div>
+              )}
+            </div>
+            <div className="input-actions" style={{ 
+              display: 'flex', 
+              gap: '8px', 
+              alignItems: 'flex-end',
+              paddingBottom: '2px'
+            }}>
               <label 
                 className="file-input-btn" 
                 title="Upload image"
@@ -423,9 +522,25 @@ function App() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '40px',
-                  height: '40px',
-                  cursor: 'pointer'
+                  width: '44px',
+                  height: '44px',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  borderRadius: '12px',
+                  backgroundColor: '#f8f9fa',
+                  border: '2px solid #e9ecef',
+                  transition: 'all 0.2s ease',
+                  fontSize: '18px',
+                  opacity: isLoading ? 0.5 : 1
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.target.style.backgroundColor = '#e9ecef';
+                    e.target.style.borderColor = '#dee2e6';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#f8f9fa';
+                  e.target.style.borderColor = '#e9ecef';
                 }}
               >
                 <input
@@ -443,14 +558,45 @@ function App() {
                 className="send-button"
                 title="Send message"
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '8px',
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
                   border: 'none',
-                  cursor: isLoading || (!message.trim() && !image) ? 'not-allowed' : 'pointer'
+                  cursor: isLoading || (!message.trim() && !image) ? 'not-allowed' : 'pointer',
+                  backgroundColor: isLoading || (!message.trim() && !image) ? '#e0e0e0' : '#4285f4',
+                  color: '#fff',
+                  fontSize: '18px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: isLoading || (!message.trim() && !image) ? 'none' : '0 2px 8px rgba(66, 133, 244, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading && (message.trim() || image)) {
+                    e.target.style.backgroundColor = '#3367d6';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(66, 133, 244, 0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLoading && (message.trim() || image)) {
+                    e.target.style.backgroundColor = '#4285f4';
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 2px 8px rgba(66, 133, 244, 0.3)';
+                  }
                 }}
               >
-                {isLoading ? '⏳' : '🚀'}
+                {isLoading ? (
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid #fff',
+                    borderTop: '2px solid transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }}></div>
+                ) : '🚀'}
               </button>
             </div>
           </div>
