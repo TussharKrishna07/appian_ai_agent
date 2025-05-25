@@ -11,7 +11,7 @@ function App() {
   const [imagePreview, setImagePreview] = useState(null);
   const [currentThreadId, setCurrentThreadId] = useState('1');
   const [chatThreads, setChatThreads] = useState([
-    { id: '1', name: 'Chat 1', createdAt: new Date().toISOString() }
+    { id: '1', name: 'Shopping Session 1', createdAt: new Date().toISOString() }
   ]);
   const [theme, setTheme] = useState('light');
   const [sidebarToggled, setSidebarToggled] = useState(false);
@@ -163,7 +163,7 @@ function App() {
     // Create new chat thread
     const newThread = {
       id: newThreadId,
-      name: `Chat ${newThreadId}`,
+      name: `Shopping Session ${newThreadId}`,
       createdAt: new Date().toISOString()
     };
     
@@ -188,118 +188,62 @@ function App() {
   };
 
   return (
-    <div className="app-container" style={{ height: '100vh', overflow: 'hidden' }}>
+    <div className="app">
       {/* Sidebar */}
-      <aside className="sidebar" style={{ flexShrink: 0, width: '280px' }}>
+      <aside className="sidebar">
         <div className="sidebar-header">
-          <div className="sidebar-title">🛍️ ShopSmarter</div>
-          <button
-            className="theme-toggle"
-            onClick={toggleTheme}
-            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
+          <div className="sidebar-title">🛒 ShopSmarter</div>
+          <div className="sidebar-subtitle">AI-Powered Shopping Assistant</div>
         </div>
-
-        <div className="sidebar-content" style={{ overflowY: 'auto', flex: 1 }}>
-          <div className="section-title">Chat History</div>
-          <div className="chat-threads">
-            {chatThreads.map((thread) => (
-              <button
-                key={thread.id}
-                className={`thread-button ${currentThreadId === thread.id ? 'active' : ''}`}
-                onClick={() => switchToThread(thread.id)}
-              >
-                {formatThreadName(thread)}
-              </button>
-            ))}
-          </div>
-
-          <div className="section-title">Shop by Category</div>
-          <div className="action-list-vertical">
-            {categories.map((category, index) => (
-              <button
-                key={index}
-                className="action-btn-sidebar"
-                onClick={() => setMessage(`Show me ${category.name} products`)}
-              >
-                <span className="action-icon">{category.icon}</span>
-                <span className="action-text">{category.name}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="section-title">Quick Actions</div>
-          <div className="action-list-vertical">
-            {quickActions.map((action, index) => (
-              <button
-                key={index}
-                className="action-btn-sidebar"
-                onClick={() => setMessage(action.text)}
-              >
-                <span className="action-icon">{action.icon}</span>
-                <span className="action-text">{action.text}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="sidebar-footer" style={{ flexShrink: 0 }}>
-          <button className="new-chat-btn" onClick={createNewChat}>
-            <span>+</span> New Conversation
-          </button>
+        
+        <button className="new-chat-button" onClick={createNewChat}>
+          🛍️ New Shopping Session
+        </button>
+        
+        <div className="chat-history">
+          {chatThreads.map((thread) => (
+            <div
+              key={thread.id}
+              className={`history-item ${currentThreadId === thread.id ? 'active' : ''}`}
+              onClick={() => switchToThread(thread.id)}
+            >
+              {formatThreadName(thread)}
+            </div>
+          ))}
         </div>
       </aside>
 
-      {/* Chat Area */}
-      <main className="chat-area" style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        height: '100vh', 
-        flex: 1,
-        minWidth: 0
-      }}>
-        <header className="app-header" style={{ flexShrink: 0 }}>
-          <h1>AI Assistant - {chatThreads.find(t => t.id === currentThreadId)?.name || 'Chat'}</h1>
+      {/* Main Chat Area */}
+      <main className="main-content">
+        <header className="chat-header">
+          <div className="chat-title">🛒 ShopSmarter Chat</div>
+          <div className="chat-subtitle">Session: {chatThreads.find(t => t.id === currentThreadId)?.name || 'Shopping Chat'}</div>
         </header>
 
-        <div 
-          className="chat-messages" 
-          ref={chatHistoryRef}
-          style={{ 
-            flex: 1, 
-            overflowY: 'auto', 
-            minHeight: 0,
-            padding: '1rem',
-            borderTop: '1px solid var(--border-color, #e0e0e0)',
-            borderBottom: '1px solid var(--border-color, #e0e0e0)'
-          }}
-        >
+        <div className="messages-container" ref={chatHistoryRef}>
           {chatHistory.length === 0 && !isLoading && (
-            <div className="empty-chat">
-              <div className="welcome-container">
-                <div className="welcome-icon">🛒</div>
-                <h2>Welcome to ShopSmarter! 🎉</h2>
-                <p className="welcome-text">
-                  I'm your AI shopping assistant.<br />
-                  Upload images of products you like, and I'll help you find similar items,
-                  complete outfits, or discover complementary products across
-                  fashion, home decor, and electronics.
-                </p>
-                <div className="welcome-features">
-                  <div className="feature">
-                    <span className="feature-icon">🔍</span>
-                    <span>Visual<br />Search</span>
-                  </div>
-                  <div className="feature">
-                    <span className="feature-icon">🎯</span>
-                    <span>Smart<br />Recommendations</span>
-                  </div>
-                  <div className="feature">
-                    <span className="feature-icon">💰</span>
-                    <span>Price<br />Comparison</span>
-                  </div>
+            <div className="welcome-screen">
+              <div className="welcome-icon">🛒</div>
+              <h2 className="welcome-title">Welcome to ShopSmarter! ✨</h2>
+              <p className="welcome-subtitle">
+                Your AI-powered personal shopping assistant for e-commerce.<br />
+                Upload product images, ask for recommendations, or find similar items! 🛍️
+              </p>
+              <div className="feature-grid">
+                <div className="feature-card">
+                  <span className="feature-icon">🔍</span>
+                  <div className="feature-title">Visual Product Search</div>
+                  <div className="feature-description">Find similar items using image recognition</div>
+                </div>
+                <div className="feature-card">
+                  <span className="feature-icon">🎯</span>
+                  <div className="feature-title">Smart Recommendations</div>
+                  <div className="feature-description">Get personalized product suggestions</div>
+                </div>
+                <div className="feature-card">
+                  <span className="feature-icon">💡</span>
+                  <div className="feature-title">Style Matching</div>
+                  <div className="feature-description">Complete your look with complementary items</div>
                 </div>
               </div>
             </div>
@@ -307,298 +251,86 @@ function App() {
 
           {chatHistory.map((msg, index) => (
             <div key={index} className={`message ${msg.role}`}>
-              <div className="message-inner">
-                <div className="message-avatar">
-                  {msg.role === 'user' ? (
-                    <div className="user-avatar">👤</div>
-                  ) : (
-                    <div className="assistant-avatar">🤖</div>
-                  )}
-                </div>
-                <div className="message-content">
-                  <div className="message-header">
-                    <span className="message-role">
-                      {msg.role === 'user' ? 'You' : 'ShopSmarter AI'}
-                    </span>
-                    <span className="message-time">
-                      {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
+              <div className="message-avatar">
+                {msg.role === 'user' ? '👤' : '🤖'}
+              </div>
+              <div className="message-content">
+                {msg.image && (
+                  <div className="message-image">
+                    <img
+                      src={msg.image}
+                      alt="Uploaded content"
+                      className="uploaded-image"
+                    />
                   </div>
-                  {msg.image && (
-                    <div className="message-image">
-                      <img
-                        src={msg.image}
-                        alt="Uploaded product"
-                        className="uploaded-image"
-                      />
-                    </div>
-                  )}
-                  <div className="message-text">
-                    <ReactMarkdown
-                      components={{
-                        a: ({ node, ...props }) => (
-                          <a target="_blank" rel="noopener noreferrer" className="product-link" {...props} />
-                        )
-                      }}
-                    >
-                      {msg.content}
-                    </ReactMarkdown>
-                  </div>
+                )}
+                <div className="message-text">
+                  <ReactMarkdown
+                    components={{
+                      a: ({ node, ...props }) => (
+                        <a target="_blank" rel="noopener noreferrer" className="product-link" {...props} />
+                      )
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             </div>
           ))}
 
           {isLoading && (
-            <div className="message assistant">
-              <div className="message-inner">
-                <div className="message-avatar">
-                  <div className="assistant-avatar">🤖</div>
-                </div>
-                <div className="message-content">
-                  <div className="message-header">
-                    <span className="message-role">ShopSmarter AI</span>
-                  </div>
-                  <div className="typing-container">
-                    <div className="typing-indicator">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <span className="typing-text">Analyzing your request...</span>
-                  </div>
-                </div>
+            <div className="typing-indicator">
+              <div className="message-avatar">🛒</div>
+              <div className="typing-dots">
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
               </div>
             </div>
           )}
         </div>
 
-        <div 
-          className="chat-input" 
-          style={{ 
-            flexShrink: 0, 
-            minHeight: '80px',
-            maxHeight: imagePreview ? '350px' : '120px',
-            padding: '1rem',
-            borderTop: '1px solid var(--border-color, #e0e0e0)',
-            backgroundColor: 'var(--input-bg, #fff)',
-            display: 'flex',
-            flexDirection: 'column',
-            transition: 'max-height 0.3s ease-in-out'
-          }}
-        >
+        <div className="input-area">
           {imagePreview && (
-            <div className="image-preview" style={{ 
-              marginBottom: '12px',
-              flexShrink: 0,
-              maxHeight: '220px',
-              overflow: 'hidden',
-              animation: 'fadeIn 0.3s ease-in-out'
-            }}>
-              <div className="preview-header" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '8px',
-                fontSize: '12px',
-                color: 'var(--text-secondary, #666)',
-                fontWeight: '500'
-              }}>
-                <span className="preview-label">📸 Image ready to send</span>
-                <button 
-                  onClick={handleRemoveImage} 
-                  className="remove-image" 
-                  style={{
-                    background: 'rgba(244, 67, 54, 0.1)',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    padding: '4px 8px',
-                    borderRadius: '6px',
-                    color: '#f44336',
-                    transition: 'all 0.2s ease',
-                    fontWeight: '600',
-                    minWidth: '24px',
-                    height: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                  onMouseEnter={(e) => e.target.style.background = 'rgba(244, 67, 54, 0.2)'}
-                  onMouseLeave={(e) => e.target.style.background = 'rgba(244, 67, 54, 0.1)'}
-                >
+            <div className="image-preview">
+              <div className="preview-header">
+                <span className="preview-label">🛍️ Product image attached</span>
+                <button onClick={handleRemoveImage} className="remove-image-btn">
                   ✕
                 </button>
               </div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '8px',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '12px',
-                border: '1px solid #e9ecef'
-              }}>
-                <img 
-                  src={imagePreview} 
-                  alt="Preview" 
-                  style={{ 
-                    maxHeight: '180px',
-                    maxWidth: '100%',
-                    width: 'auto',
-                    height: 'auto',
-                    objectFit: 'contain',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
-                    transition: 'transform 0.2s ease'
-                  }} 
-                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
-                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                />
-              </div>
+              <img src={imagePreview} alt="Preview" />
             </div>
           )}
-          <div className="input-row" style={{ 
-            display: 'flex', 
-            gap: '12px', 
-            alignItems: 'flex-end',
-            flexShrink: 0
-          }}>
-            <div style={{ flex: 1, position: 'relative' }}>
-              <textarea
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                  // Auto-resize textarea
-                  e.target.style.height = 'auto';
-                  e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
-                }}
-                onKeyPress={handleKeyPress}
-                placeholder="Describe what you're looking for or upload an image..."
+          <div className="input-container">
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="🛍️ Ask for product recommendations...."
+              disabled={isLoading}
+              rows="1"
+              className="message-input"
+            />
+            <label className="file-input-btn" title="Upload product image">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
                 disabled={isLoading}
-                rows="1"
-                style={{
-                  width: '100%',
-                  minHeight: '44px',
-                  maxHeight: '80px',
-                  resize: 'none',
-                  border: '2px solid var(--border-color, #e0e0e0)',
-                  borderRadius: '12px',
-                  padding: '12px 16px',
-                  fontFamily: 'inherit',
-                  fontSize: '14px',
-                  lineHeight: '1.5',
-                  outline: 'none',
-                  transition: 'all 0.2s ease',
-                  backgroundColor: isLoading ? '#f5f5f5' : '#fff',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                }}
-                className="message-input"
-                onFocus={(e) => e.target.style.borderColor = '#4285f4'}
-                onBlur={(e) => e.target.style.borderColor = 'var(--border-color, #e0e0e0)'}
+                style={{ display: 'none' }}
               />
-              {isLoading && (
-                <div style={{
-                  position: 'absolute',
-                  right: '16px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  fontSize: '12px',
-                  color: '#666',
-                  fontWeight: '500'
-                }}>
-                  Processing...
-                </div>
-              )}
-            </div>
-            <div className="input-actions" style={{ 
-              display: 'flex', 
-              gap: '8px', 
-              alignItems: 'flex-end',
-              paddingBottom: '2px'
-            }}>
-              <label 
-                className="file-input-btn" 
-                title="Upload image"
-                style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '44px',
-                  height: '44px',
-                  cursor: isLoading ? 'not-allowed' : 'pointer',
-                  borderRadius: '12px',
-                  backgroundColor: '#f8f9fa',
-                  border: '2px solid #e9ecef',
-                  transition: 'all 0.2s ease',
-                  fontSize: '18px',
-                  opacity: isLoading ? 0.5 : 1
-                }}
-                onMouseEnter={(e) => {
-                  if (!isLoading) {
-                    e.target.style.backgroundColor = '#e9ecef';
-                    e.target.style.borderColor = '#dee2e6';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#f8f9fa';
-                  e.target.style.borderColor = '#e9ecef';
-                }}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  disabled={isLoading}
-                  style={{ display: 'none' }}
-                />
-                📎
-              </label>
-              <button
-                onClick={sendMessage}
-                disabled={isLoading || (!message.trim() && !image)}
-                className="send-button"
-                title="Send message"
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  cursor: isLoading || (!message.trim() && !image) ? 'not-allowed' : 'pointer',
-                  backgroundColor: isLoading || (!message.trim() && !image) ? '#e0e0e0' : '#4285f4',
-                  color: '#fff',
-                  fontSize: '18px',
-                  transition: 'all 0.2s ease',
-                  boxShadow: isLoading || (!message.trim() && !image) ? 'none' : '0 2px 8px rgba(66, 133, 244, 0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-                onMouseEnter={(e) => {
-                  if (!isLoading && (message.trim() || image)) {
-                    e.target.style.backgroundColor = '#3367d6';
-                    e.target.style.transform = 'translateY(-1px)';
-                    e.target.style.boxShadow = '0 4px 12px rgba(66, 133, 244, 0.4)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isLoading && (message.trim() || image)) {
-                    e.target.style.backgroundColor = '#4285f4';
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 2px 8px rgba(66, 133, 244, 0.3)';
-                  }
-                }}
-              >
-                {isLoading ? (
-                  <div style={{
-                    width: '16px',
-                    height: '16px',
-                    border: '2px solid #fff',
-                    borderTop: '2px solid transparent',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
-                  }}></div>
-                ) : '🚀'}
-              </button>
-            </div>
+              📸
+            </label>
+            <button
+              onClick={sendMessage}
+              disabled={isLoading || (!message.trim() && !image)}
+              className="send-button"
+              title="Send message"
+            >
+              {isLoading ? '⏳' : '🚀'}
+            </button>
           </div>
         </div>
       </main>

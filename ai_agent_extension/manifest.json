@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Chat Extension",
+  "name": "ShopSmarter",
   "version": "0.0.4",
-  "description": "A chat extension using Gemini models",
+  "description": "AI-Powered Personal Shopping Assistant for E-Commerce",
   "permissions": [
     "storage",
     "activeTab",
