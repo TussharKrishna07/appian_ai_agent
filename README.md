@@ -365,20 +365,8 @@ ai_agent/
 ### 🔍 **Smart Product Discovery**
 - **Visual Search**: Upload any product image for instant recommendations
 - **Screen Capture**: Capture products directly from any website
-- **Real-Time Search**: Live product availability and pricing
 - **Category Intelligence**: Specialized recommendations for fashion, home decor, gadgets
 
-### 🛒 **Automated Shopping Experience**
-- **Direct Amazon Links**: One-click access to purchase recommendations
-- **Price Comparison**: Find best deals across platforms
-- **Complementary Suggestions**: Complete outfit and decor recommendations
-- **Shopping Cart Integration**: Streamlined purchase workflow
-
-### 🌐 **Cross-Platform Integration**
-- **Chrome Extension**: Shop anywhere on the web
-- **Web Application**: Full-featured desktop experience
-- **API Access**: Integrate with other applications
-- **Persistent Sessions**: Resume shopping across devices
 
 ## 🤝 Contributing
 
@@ -425,7 +413,6 @@ We welcome contributions to **ShopSmarter**! Please follow these steps:
 8. Open a Pull Request with detailed description
 
 ### Areas for Contribution
-- **AI Model Improvements**: Enhance product recognition accuracy
 - **UI/UX Enhancements**: Improve user interface and experience
 - **Browser Compatibility**: Support for Firefox, Safari, Edge
 - **Mobile App**: React Native implementation
@@ -460,70 +447,12 @@ npm run build --verbose
 2. Check browser console for JavaScript errors
 3. Verify manifest.json permissions
 
-## 🎬 Demo & Screenshots
-
-### Web Interface
-```
-🖥️  Modern Web Application
-┌─────────────────────────────────────────┐
-│  🔍 Upload Image or Enter Text Query    │
-├─────────────────────────────────────────┤
-│  📸 [Drag & Drop Product Image Here]   │
-├─────────────────────────────────────────┤
-│  🤖 AI: "I can see this is a blue      │
-│      denim jacket. Here are similar    │
-│      items and matching accessories:"  │
-│                                         │
-│  🛒 [Amazon Link] Blue Denim Jacket    │
-│  👕 [Amazon Link] White Cotton T-Shirt │
-│  👖 [Amazon Link] Dark Jeans           │
-└─────────────────────────────────────────┘
-```
-
-### Chrome Extension
-```
-🌐 Browser Extension Workflow
-┌─────────────────────────────────────────┐
-│  1. Click Extension Icon                │
-│  2. Select "Capture Area"               │
-│  3. Draw selection around product       │
-│  4. AI analyzes captured image          │
-│  5. Get instant recommendations         │
-└─────────────────────────────────────────┘
-```
 
 ### Sample Use Cases
 - **Fashion**: Upload outfit → Get matching accessories
 - **Home Decor**: Capture furniture → Find complementary items  
 - **Gadgets**: Show device → Discover compatible accessories
 - **Shopping**: Screenshot product → Compare prices & alternatives
-
-## 🚀 Performance & Scalability
-
-### Optimization Features
-- **Image Compression**: Automatic resizing for faster processing
-- **Caching**: Intelligent caching for repeated queries
-- **Lazy Loading**: Optimized resource loading
-- **CDN Ready**: Prepared for content delivery networks
-
-### Scalability Considerations  
-- **Stateless Architecture**: Easy horizontal scaling
-- **Database Ready**: Prepared for user data persistence
-- **Load Balancing**: Designed for multi-instance deployment
-- **API Rate Limiting**: Built-in request throttling
-
-## 🔐 Security & Privacy
-
-### Data Protection
-- **No Data Storage**: Images processed in real-time, not stored
-- **Secure API Keys**: Environment-based configuration
-- **HTTPS Ready**: SSL/TLS encryption support
-- **CORS Protection**: Cross-origin request security
-
-### Privacy Features
-- **Local Processing**: Chrome extension works locally
-- **Minimal Data**: Only necessary data sent to AI services
-- **User Control**: Complete control over data sharing
 
 ## 🌍 Future Roadmap
 
@@ -558,11 +487,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS** for modern utility-first CSS framework
 - **Chrome Extensions Team** for comprehensive Manifest V3 documentation
 - **APPIAN Hackathon** for the inspiring challenge and opportunity
-
-### Special Thanks
-- **Team AVTAR** for collaborative development and innovative ideas
-- **Open Source Community** for the foundational libraries and tools
-- **Beta Testers** for valuable feedback and suggestions
 
 ---
 
